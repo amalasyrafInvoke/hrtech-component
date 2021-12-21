@@ -1,4 +1,3 @@
-import { useState } from "react";
 import BookingCalendar from "./components/bookingCalendar";
 
 function App() {

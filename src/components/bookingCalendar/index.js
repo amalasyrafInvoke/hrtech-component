@@ -1,29 +1,68 @@
-import React, { useState } from 'react';
-import { DatePicker, LocalizationProvider } from '@mui/lab';
-import DateAdapter from '@mui/lab/AdapterMoment';
-import { TextField, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Icon } from '@mui/material';
 import useDates from '../../hooks/useDate';
 import moment from 'moment';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import CalendarFilter from './calendarFilters';
+import mockCalendarEvents from '../../resources/mockCalendarEvents';
+import CalendarDatePicker from './calendarDatePicker';
 
 const dayofWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
-const DayDiv = ({ day }) => {
+const getFilterColor = (key) => {
+  switch (key) {
+    case 'LEAVE':
+      return 'pink';
+
+    case 'BIRTHDAY':
+      return 'thistle';
+
+    case 'ANNIVERSARY':
+      return 'lightseagreen';
+
+    default:
+      return 'white';
+  }
+};
+
+const DayDiv = ({ day, filter }) => {
+  const [filteredArray, setFilteredArray] = useState([]);
+
+  const getFilteredEvents = () => {
+    let events = mockCalendarEvents.filter(function (item) {
+      for (var key in filter) {
+        if (
+          item.type.toLowerCase() === key.toLowerCase() &&
+          filter[key] !== false
+        )
+          return true;
+      }
+      return false;
+    });
+
+    setFilteredArray(events);
+  };
+
+  useEffect(() => {
+    getFilteredEvents();
+  }, [filter]);
+
   return (
     <Box
       onClick={() =>
         alert(
-          `hello ${moment(day).format('dddd')}, ${moment(day).format(
-            'Do MMM YYYY'
-          )} `
+          `hello ${moment(day.fullDate).format('dddd')}, ${moment(
+            day.fullDate
+          ).format('Do MMM YYYY')} `
         )
       }
       sx={{
         backgroundColor: 'white',
         width: 'calc(100% / 7 - 2px)',
-        minHeight: '150px',
+        minHeight: '200px',
+        maxHeight: '200px',
+        overflow: 'scroll',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         border: '1px solid lightgray',
@@ -39,7 +78,51 @@ const DayDiv = ({ day }) => {
           color: 'gray',
         }}
       >
-        <h5>{day.day}</h5>
+        <p
+          style={{
+            backgroundColor:
+              moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+              moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
+              'black',
+            color:
+              moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+              moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
+              'white',
+            padding: '5px',
+            fontSize: '0.75rem',
+            borderRadius: '50%',
+          }}
+        >
+          {day.day < 10 ? `0${day.day}` : day.day}
+        </p>
+      </Box>
+      <Box sx={{ my: 2 }}>
+        {filteredArray.map((event) => {
+          if (
+            moment(day.fullDate).isSame(new Date(event.dates))
+          ) {
+            return (
+              <Box
+                sx={[
+                  {
+                    fontSize: '0.75rem',
+                    mx: 1,
+                    borderRadius: '7px',
+                    px: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                  },
+                  {
+                    backgroundColor: getFilterColor(event.type),
+                  },
+                ]}
+              >
+                <Icon sx={{ mr: 1 }}>{event.icon}</Icon>
+                <p>{`${event.employeeName}'s ${event.name}`}</p>
+              </Box>
+            );
+          } else return;
+        })}
       </Box>
     </Box>
   );
@@ -51,7 +134,7 @@ const EmptyDiv = ({}) => {
       sx={{
         backgroundColor: 'white',
         width: 'calc(100% / 7 - 2px)',
-        minHeight: '150px',
+        minHeight: '200px',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
@@ -70,59 +153,18 @@ const EmptyDiv = ({}) => {
   );
 };
 
-export default function BookingCalendar({ test }) {
+export default function BookingCalendar() {
   const [value, setValue] = useState(new Date());
+  const [filter, setFilter] = useState({
+    leave: true,
+    birthday: true,
+    anniversary: true,
+  });
   const { days } = useDates({ dates: value });
 
   return (
     <div style={{ padding: '15px' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: { xs: 'flex-start', md: 'space-between' },
-        }}
-      >
-        <h1>{moment(value).format('MMMM YYYY')}</h1>
-        <Box sx={{ padding: '20px', display: 'flex', alignItems: 'center' }}>
-          <ArrowCircleLeftIcon
-            onClick={() => setValue(moment(value).subtract(1, 'month'))}
-            htmlColor='darkslategray'
-            sx={[
-              { mx: 1 },
-              {
-                '&:hover': {
-                  opacity: '0.85',
-                },
-              },
-            ]}
-          />
-          <LocalizationProvider dateAdapter={DateAdapter}>
-            <DatePicker
-              label='Display dates'
-              views={['year', 'month']}
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <ArrowCircleRightIcon
-            onClick={() => setValue(moment(value).add(1, 'month'))}
-            htmlColor='darkslategray'
-            sx={[
-              { mx: 1 },
-              {
-                '&:hover': {
-                  opacity: '0.85',
-                },
-              },
-            ]}
-          />
-        </Box>
-      </Box>
+      <CalendarDatePicker value={value} setValue={setValue} />
 
       <Box
         sx={{
@@ -135,18 +177,20 @@ export default function BookingCalendar({ test }) {
         <Box
           sx={{
             display: { xs: 'none', md: 'block' },
-            width: '25%',
-            backgroundColor: 'lightgray',
+            width: '20%',
+            backgroundColor: 'whitesmoke',
             height: 'calc(75vh + 50px)',
             borderRadius: '15px',
           }}
-        ></Box>
+        >
+          <CalendarFilter filter={filter} setFilter={setFilter} />
+        </Box>
         <Box
           sx={{
             border: '1px solid gray',
             borderRadius: '15px',
             overflow: 'hidden',
-            width: { xs: '100%', md: '75%' },
+            width: { xs: '100%', md: '80%' },
           }}
         >
           <Box
@@ -163,7 +207,7 @@ export default function BookingCalendar({ test }) {
               <Box
                 sx={{
                   width: 'calc(100% / 7 - 2px)',
-                  textAlign: 'center',
+                  mx: 1.5
                 }}
               >
                 {day}
@@ -179,7 +223,7 @@ export default function BookingCalendar({ test }) {
               display: 'flex',
               alignItems: 'flex-start',
               flexWrap: 'wrap',
-              overflow: { xs: 'visible', md: 'scroll' },
+              overflow: 'scroll',
             }}
           >
             {days.map((day, index) => {
@@ -189,12 +233,12 @@ export default function BookingCalendar({ test }) {
                     {Array.from({ length: day.hari }, (_, k) => (
                       <EmptyDiv day={day} />
                     ))}
-                    <DayDiv day={day} />
+                    <DayDiv day={day} filter={filter} />
                   </>
                 );
               }
 
-              return <DayDiv day={day} />;
+              return <DayDiv day={day} filter={filter} />;
             })}
           </Box>
         </Box>
