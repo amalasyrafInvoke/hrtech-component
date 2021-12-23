@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Icon } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
+import { Box, Icon, Popover, Typography, Button } from '@mui/material';
 import useDates from '../../hooks/useDate';
 import moment from 'moment';
 import CalendarFilter from './calendarFilters';
@@ -56,16 +56,29 @@ const DayDiv = ({ day, filter }) => {
         )
       }
       sx={{
-        backgroundColor: 'white',
-        width: 'calc(100% / 7 - 2px)',
-        minHeight: '200px',
-        maxHeight: '200px',
-        overflow: 'scroll',
+        backgroundColor:
+          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+          moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+            ? 'darkslategray'
+            : 'white',
+        color:
+          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+          moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
+          'white',
+        width: 'calc(100% / 7 - 8px)',
+        minHeight: '250px',
+        maxHeight: '250px',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        border: '1px solid lightgray',
+        borderTop:  moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+        moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+          ? '4px solid #EEBC1D'
+          : '4px solid gray',
+        m: 0.5,
       }}
     >
       <Box
@@ -73,58 +86,235 @@ const DayDiv = ({ day, filter }) => {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
-          width: '100%',
-          px: 1,
+          px: 0.5,
           color: 'gray',
         }}
       >
-        <p
+        <h6
           style={{
             backgroundColor:
               moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
               moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
-              'black',
+              'darkslategray',
             color:
               moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
               moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
-              'white',
-            padding: '5px',
-            fontSize: '0.75rem',
+              '#EEBC1D',
+            padding: '10px',
+            marginBlock: 0,
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
             borderRadius: '50%',
           }}
         >
           {day.day < 10 ? `0${day.day}` : day.day}
-        </p>
+        </h6>
       </Box>
-      <Box sx={{ my: 2 }}>
+      <Box sx={{ my: 0.5 }}>
         {filteredArray.map((event) => {
-          if (
-            moment(day.fullDate).isSame(new Date(event.dates))
-          ) {
-            return (
-              <Box
-                sx={[
-                  {
-                    fontSize: '0.75rem',
-                    mx: 1,
-                    borderRadius: '7px',
-                    px: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                  },
-                  {
-                    backgroundColor: getFilterColor(event.type),
-                  },
-                ]}
-              >
-                <Icon sx={{ mr: 1 }}>{event.icon}</Icon>
-                <p>{`${event.employeeName}'s ${event.name}`}</p>
-              </Box>
-            );
-          } else return;
+          if (moment(day.fullDate).isSame(new Date(event.dates))) {
+            return <_renderDayEvents event={event} />;
+          }
         })}
       </Box>
     </Box>
+  );
+};
+
+const _renderDayEvents = ({ event }) => {
+  const [openPopever, setOpenPopever] = useState(false);
+  const popoverAnchor = useRef(null);
+
+  const _renderButton = ({ title, color, textColor }) => {
+    return (
+      <Button
+        sx={[
+          {
+            backgroundColor: color ? color : 'darkslategray',
+            color: textColor ? textColor : 'black',
+            p: 1,
+          },
+          {
+            '&:hover': {
+              opacity: '0.75',
+              backgroundColor: color,
+            },
+          },
+        ]}
+      >
+        {title}
+      </Button>
+    );
+  };
+
+  return (
+    <>
+      <Box
+        sx={[
+          {
+            fontSize: '0.75rem',
+            mx: 1,
+            borderRadius: '7px',
+            px: 1.5,
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+          },
+          {
+            backgroundColor: getFilterColor(event.type),
+          },
+        ]}
+        ref={popoverAnchor}
+        onMouseOver={() => setOpenPopever(true)}
+        onMouseLeave={() => setOpenPopever(false)}
+      >
+        <Icon sx={{ mr: 3 }}>{event.icon}</Icon>
+        <p>{`${event.employeeName}'s`}</p>
+      </Box>
+      <Popover
+        sx={{
+          pointerEvents: 'none',
+        }}
+        open={openPopever}
+        anchorEl={popoverAnchor.current}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        disableRestoreFocus
+        PaperProps={{
+          sx: { pointerEvents: 'auto' },
+          onMouseOver: () => setOpenPopever(true),
+          onMouseLeave: () => setOpenPopever(false),
+        }}
+      >
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            width: '300px',
+            height: '300px',
+            borderRadius: '10px',
+          }}
+        >
+          <Box
+            sx={[
+              { position: 'absolute', top: 0, width: '100%', height: '10px' },
+              {
+                backgroundColor:
+                  event.type === 'LEAVE'
+                    ? 'pink'
+                    : event.type === 'BIRTHDAY'
+                    ? 'thistle'
+                    : 'lightseagreen',
+              },
+            ]}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              my: '20px',
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor:
+                  event.type === 'LEAVE'
+                    ? 'pink'
+                    : event.type === 'BIRTHDAY'
+                    ? 'thistle'
+                    : 'lightseagreen',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '75px',
+                height: '75px',
+                p: 1,
+                m: '1rem auto',
+              }}
+            >
+              <Icon sx={{ fontSize: 50, textAlign: 'center' }}>
+                {event.icon}
+              </Icon>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                {`${event.employeeName}'s ${event.name}`}
+              </Typography>
+              <Typography variant='p' sx={{ fontStyle: 'italic' }}>
+                {moment(event.dates).format('DD MMMM YYYY')}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                my: 3,
+              }}
+            >
+              {(() => {
+                switch (event.type) {
+                  case 'LEAVE':
+                    return (
+                      <>
+                        <_renderButton
+                          color='white'
+                          textColor='pink'
+                          title='Reject'
+                        />
+                        <_renderButton
+                          color='pink'
+                          textColor='white'
+                          title={'Approve'}
+                        />
+                      </>
+                    );
+
+                  case 'BIRTHDAY':
+                    return (
+                      <>
+                        <_renderButton
+                          color='thistle'
+                          textColor='white'
+                          title={'Wish Birthday'}
+                        />
+                      </>
+                    );
+                  case 'ANNIVERSARY':
+                    return (
+                      <>
+                        <_renderButton
+                          color='lightseagreen'
+                          textColor='white'
+                          title={'Congratulate'}
+                        />
+                      </>
+                    );
+
+                  default:
+                    return null;
+                }
+              })()}
+            </Box>
+          </Box>
+        </Box>
+      </Popover>
+    </>
   );
 };
 
@@ -133,12 +323,13 @@ const EmptyDiv = ({}) => {
     <Box
       sx={{
         backgroundColor: 'white',
-        width: 'calc(100% / 7 - 2px)',
-        minHeight: '200px',
+        width: 'calc(100% / 7 - 8px)',
+        minHeight: '250px',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        border: '1px solid lightgray',
+        m: 0.5,
+        // borderTop: '3px solid lightgray',
       }}
     >
       <Box
@@ -177,7 +368,7 @@ export default function BookingCalendar() {
         <Box
           sx={{
             display: { xs: 'none', md: 'block' },
-            width: '20%',
+            width: { xs: '25%', md: '15%' },
             backgroundColor: 'whitesmoke',
             height: 'calc(75vh + 50px)',
             borderRadius: '15px',
@@ -187,10 +378,10 @@ export default function BookingCalendar() {
         </Box>
         <Box
           sx={{
-            border: '1px solid gray',
-            borderRadius: '15px',
+            // border: '1px solid gray',
+            // borderRadius: '15px',
             overflow: 'hidden',
-            width: { xs: '100%', md: '80%' },
+            width: { xs: '100%', sm: '100%', md: '85%' },
           }}
         >
           <Box
@@ -199,15 +390,15 @@ export default function BookingCalendar() {
               height: '50px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              borderBottom: '1px solid gray',
+              // borderBottom: '1px solid gray',
             }}
           >
             {dayofWeek.map((day) => (
               <Box
                 sx={{
                   width: 'calc(100% / 7 - 2px)',
-                  mx: 1.5
+                  mx: 1.5,
+                  fontWeight: 'bold',
                 }}
               >
                 {day}

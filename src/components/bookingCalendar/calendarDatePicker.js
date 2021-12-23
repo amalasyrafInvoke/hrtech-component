@@ -1,7 +1,7 @@
 import React from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Button, Typography } from '@mui/material';
 import moment from 'moment';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
@@ -16,8 +16,34 @@ export default function CalendarDatePicker({ value, setValue }) {
         justifyContent: { xs: 'flex-start', md: 'space-between' },
       }}
     >
-      <h1>{moment(value).format('MMMM YYYY')}</h1>
+      <Box sx={{ width: { xs: 'auto', md: '500px' }, mb: {xs: 0, md: 4} }}>
+        <h1>{moment(value).format('MMMM YYYY')}</h1>
+        <Typography
+          variant='p'
+          fontSize={14}
+          sx={{ display: { xs: 'none', md: 'block' } }}
+        >
+          The shared calendar across the company. You will be able to find
+          information regarding the availability of employees, birthdays and
+          anniversaries here.
+        </Typography>
+      </Box>
       <Box sx={{ padding: '20px', display: 'flex', alignItems: 'center' }}>
+        <Button
+          sx={[
+            { backgroundColor: 'darkslategray', mx: 1 },
+            {
+              '&:hover': {
+                opacity: '0.85',
+                backgroundColor: 'darkslategray',
+              },
+            },
+          ]}
+          variant='contained'
+          onClick={() => setValue(new Date())}
+        >
+          Today
+        </Button>
         <ArrowCircleLeftIcon
           onClick={() => setValue(moment(value).subtract(1, 'month'))}
           htmlColor='darkslategray'
@@ -30,6 +56,7 @@ export default function CalendarDatePicker({ value, setValue }) {
             },
           ]}
         />
+
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DatePicker
             label='Display dates'
