@@ -16,8 +16,15 @@ export default function CalendarFilter({ filter, setFilter }) {
       }}
     >
       <h3>Filters</h3>
-      <Box>
-        <FormGroup>
+      <Box sx={{
+        mb: 1,
+      }}>
+        <FormGroup
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'row', md: 'column' },
+          }}
+        >
           <FormControlLabel
             control={
               <Checkbox
