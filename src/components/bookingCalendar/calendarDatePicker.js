@@ -6,7 +6,23 @@ import moment from 'moment';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
-export default function CalendarDatePicker({ value, setValue }) {
+export default function CalendarDatePicker({
+  value,
+  setValue,
+  days,
+  handleClick,
+}) {
+  const handleClickToday = (ev) => {
+    setValue(new Date());
+
+    const index = days.findIndex(
+      (day) =>
+        moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+        moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+    );
+    handleClick(index);
+  };
+
   return (
     <Box
       sx={{
@@ -16,7 +32,7 @@ export default function CalendarDatePicker({ value, setValue }) {
         justifyContent: { xs: 'flex-start', md: 'space-between' },
       }}
     >
-      <Box sx={{ width: { xs: 'auto', md: '500px' }, mb: {xs: 0, md: 4} }}>
+      <Box sx={{ width: { xs: 'auto', md: '500px' }, mb: { xs: 0, md: 4 } }}>
         <h1>{moment(value).format('MMMM YYYY')}</h1>
         <Typography
           variant='p'
@@ -40,7 +56,7 @@ export default function CalendarDatePicker({ value, setValue }) {
             },
           ]}
           variant='contained'
-          onClick={() => setValue(new Date())}
+          onClick={(ev) => handleClickToday(ev)}
         >
           Today
         </Button>

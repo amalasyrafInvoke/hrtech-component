@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, createRef } from 'react';
 import { Box } from '@mui/material';
 import useDates from '../../hooks/useDate';
 import CalendarFilter from './calendarFilters';
 import CalendarDatePicker from './calendarDatePicker';
 import { DayDiv, EmptyDiv } from './dayBlock';
+import MiniCalendar from './miniCalendar';
 
 const dayofWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
@@ -15,10 +16,20 @@ export default function BookingCalendar() {
     anniversary: true,
   });
   const { days } = useDates({ dates: value });
+  const divRef = useRef([]);
+
+  const handleClick = (index) => {
+    if (divRef.current[index]) {
+      divRef.current[index].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  };
 
   return (
     <div style={{ padding: '15px' }}>
-      <CalendarDatePicker value={value} setValue={setValue} />
+      <CalendarDatePicker value={value} setValue={setValue} days={days} handleClick={handleClick} />
 
       <Box
         sx={{
@@ -31,21 +42,30 @@ export default function BookingCalendar() {
       >
         <Box
           sx={{
-            // display: { xs: 'none', md: 'block' },
-            width: { xs: '100%', md: '15%' },
+            display: { xs: 'flex', md: 'flex' },
+            flexDirection: { xs: 'row', md: 'column' },
+            alignItems: { xs: 'center', md: 'flex-start' },
+            justifyContent: 'space-between',
+            width: { xs: '100%', md: '20%', lg: '15%' },
             backgroundColor: 'whitesmoke',
-            height: { xs: 'auto', md: 'calc(75vh + 50px)' } ,
+            height: { xs: 'auto', md: 'calc(65vh + 50px)' },
             borderRadius: '15px',
           }}
         >
           <CalendarFilter filter={filter} setFilter={setFilter} />
+          <MiniCalendar
+            value={value}
+            days={days}
+            filter={filter}
+            handleClick={handleClick}
+          />
         </Box>
         <Box
           sx={{
             // border: '1px solid gray',
             // borderRadius: '15px',
             overflow: 'hidden',
-            width: { xs: '100%', sm: '100%', md: '85%' },
+            width: { xs: '100%', sm: '100%', md: '80%', lg: '85%' },
           }}
         >
           <Box
@@ -61,7 +81,7 @@ export default function BookingCalendar() {
               <Box
                 sx={{
                   width: 'calc(100% / 7 - 2px)',
-                  mx: {xs: 0.2, md: 1.5},
+                  mx: { xs: 0.2, md: 1.5 },
                   fontWeight: 'bold',
                 }}
               >
@@ -73,7 +93,7 @@ export default function BookingCalendar() {
           <Box
             sx={{
               backgroundColor: 'white',
-              height: '75vh',
+              height: '65vh',
               width: '100%',
               display: 'flex',
               alignItems: 'flex-start',
@@ -88,12 +108,19 @@ export default function BookingCalendar() {
                     {Array.from({ length: day.hari }, (_, k) => (
                       <EmptyDiv day={day} />
                     ))}
-                    <DayDiv day={day} filter={filter} />
+                    <DayDiv
+                      day={day}
+                      filter={filter}
+                      ref={divRef}
+                      index={index}
+                    />
                   </>
                 );
               }
 
-              return <DayDiv day={day} filter={filter} />;
+              return (
+                <DayDiv day={day} filter={filter} ref={divRef} index={index} />
+              );
             })}
           </Box>
         </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Box, Icon, Popover, Typography, Button } from '@mui/material';
 import moment from 'moment';
 import mockCalendarEvents from '../../resources/mockCalendarEvents';
@@ -19,99 +19,103 @@ const getFilterColor = (key) => {
   }
 };
 
-export const DayDiv = ({ day, filter }) => {
-  const [filteredArray, setFilteredArray] = useState([]);
+export const DayDiv = forwardRef(
+  ({ day, filter, compact = false, handleClick, index }, ref) => {
+    const [filteredArray, setFilteredArray] = useState([]);
 
-  const getFilteredEvents = () => {
-    let events = mockCalendarEvents.filter(function (item) {
-      for (var key in filter) {
-        if (
-          item.type.toLowerCase() === key.toLowerCase() &&
-          filter[key] !== false
-        )
-          return true;
-      }
-      return false;
-    });
+    const getFilteredEvents = () => {
+      let events = mockCalendarEvents.filter(function (item) {
+        for (var key in filter) {
+          if (
+            item.type.toLowerCase() === key.toLowerCase() &&
+            filter[key] !== false
+          )
+            return true;
+        }
+        return false;
+      });
 
-    setFilteredArray(events);
-  };
+      setFilteredArray(events);
+    };
 
-  useEffect(() => {
-    getFilteredEvents();
-  }, [filter]);
+    useEffect(() => {
+      getFilteredEvents();
+    }, [filter]);
 
-  return (
-    <Box
-      // onClick={() =>
-      //   alert(
-      //     `hello ${moment(day.fullDate).format('dddd')}, ${moment(
-      //       day.fullDate
-      //     ).format('Do MMM YYYY')} `
-      //   )
-      // }
-      sx={{
-        backgroundColor:
-          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-          moment(day.fullDate).isSame(new Date().toISOString(), 'month')
-            ? 'darkslategray'
-            : 'white',
-        color:
-          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-          moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
-          'white',
-        width: 'calc(100% / 7 - 8px)',
-        minHeight: '250px',
-        maxHeight: '250px',
-        overflowY: 'scroll',
-        overflowX: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        borderTop:
-          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-          moment(day.fullDate).isSame(new Date().toISOString(), 'month')
-            ? '4px solid #EEBC1D'
-            : '4px solid gray',
-        m: { xs: 0.5, md: 0.5 },
-      }}
-    >
+    return (
       <Box
         sx={{
+          backgroundColor: compact
+            ? 'inherit'
+            : moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+              moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+            ? 'darkslategray'
+            : 'white',
+          color:
+            moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+            moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
+            'white',
+          width: compact ? 'calc(100% / 7 - 4px)' : 'calc(100% / 7 - 8px)',
+          minHeight: compact ? '0px' : '250px',
+          maxHeight: '250px',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
-          px: { xs: 0, md: 0.5 },
-          color: 'gray',
+          borderTop: compact
+            ? 'none'
+            : moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+              moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+            ? '4px solid #EEBC1D'
+            : '4px solid gray',
+          m: compact ? 0.25 : { xs: 0.5, md: 0.5 },
         }}
+        ref={compact ? null : (el) => (ref.current[index] = el)}
+        onClick={compact ? handleClick : null}
       >
-        <h6
-          style={{
-            color:
-              moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-              moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
-              '#EEBC1D',
-            padding: '5px',
-            marginBlock: 0,
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            borderRadius: '50%',
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            px: { xs: 0, md: 0.5 },
+            color: 'gray',
           }}
         >
-          {day.day < 10 ? `0${day.day}` : day.day}
-        </h6>
+          <h6
+            style={{
+              color:
+                moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+                moment(day.fullDate).isSame(
+                  new Date().toISOString(),
+                  'month'
+                ) &&
+                '#EEBC1D',
+              padding: compact ? '0px' : '5px',
+              marginBlock: 0,
+              fontSize: compact ? '0.65rem' : '1.5rem',
+              fontWeight: 'bold',
+              borderRadius: '50%',
+            }}
+          >
+            {day.day < 10 ? `0${day.day}` : day.day}
+          </h6>
+        </Box>
+        {/* <Box sx={{ my: 0.5 }}> */}
+        {compact
+          ? null
+          : filteredArray.map((event) => {
+              if (moment(day.fullDate).isSame(new Date(event.dates))) {
+                return <_renderDayEvents event={event} />;
+              }
+            })}
+        {/* </Box> */}
       </Box>
-      {/* <Box sx={{ my: 0.5 }}> */}
-      {filteredArray.map((event) => {
-        if (moment(day.fullDate).isSame(new Date(event.dates))) {
-          return <_renderDayEvents event={event} />;
-        }
-      })}
-      {/* </Box> */}
-    </Box>
-  );
-};
+    );
+  }
+);
 
 const _renderDayEvents = ({ event }) => {
   const [openPopever, setOpenPopever] = useState(false);
@@ -313,17 +317,17 @@ const _renderDayEvents = ({ event }) => {
   );
 };
 
-export const EmptyDiv = ({}) => {
+export const EmptyDiv = ({ compact = false }) => {
   return (
     <Box
       sx={{
-        backgroundColor: 'white',
-        width: 'calc(100% / 7 - 8px)',
-        minHeight: '250px',
+        backgroundColor: compact ? 'gray' : 'white',
+        width: compact ? 'calc(100% / 7 - 4px)' : 'calc(100% / 7 - 8px)',
+        minHeight: compact ? '0px' : '250px',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        m: 0.5,
+        m: compact ? 0.25 : { xs: 0.5, md: 0.5 },
         // borderTop: '3px solid lightgray',
       }}
     >
