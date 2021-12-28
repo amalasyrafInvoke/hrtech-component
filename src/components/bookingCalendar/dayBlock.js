@@ -55,7 +55,7 @@ export const DayDiv = forwardRef(
             moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
             'white',
           width: compact ? 'calc(100% / 7 - 4px)' : 'calc(100% / 7 - 8px)',
-          minHeight: compact ? '0px' : '250px',
+          minHeight: compact ? '25px' : '250px',
           maxHeight: '250px',
           overflowY: 'scroll',
           overflowX: 'hidden',
@@ -70,6 +70,7 @@ export const DayDiv = forwardRef(
             ? '4px solid #EEBC1D'
             : '4px solid gray',
           m: compact ? 0.25 : { xs: 0.5, md: 0.5 },
+          cursor: compact ? 'pointer' : 'default',
         }}
         ref={compact ? null : (el) => (ref.current[index] = el)}
         onClick={compact ? handleClick : null}
@@ -102,20 +103,29 @@ export const DayDiv = forwardRef(
             {day.day < 10 ? `0${day.day}` : day.day}
           </h6>
         </Box>
-        {compact
-          ? null
-          : filteredArray.map((event) => {
+        {compact ? (
+          <Box sx={{ display: 'flex', my: 0.5 }}>
+            {filteredArray.map((event) => {
               if (moment(day.fullDate).isSame(new Date(event.dates))) {
-                return <RenderDayEvents event={event} />;
+                return <RenderDayEvents event={event} compact={compact} />;
               }
               return null;
             })}
+          </Box>
+        ) : (
+          filteredArray.map((event) => {
+            if (moment(day.fullDate).isSame(new Date(event.dates))) {
+              return <RenderDayEvents event={event} />;
+            }
+            return null;
+          })
+        )}
       </Box>
     );
   }
 );
 
-const RenderDayEvents = ({ event }) => {
+const RenderDayEvents = ({ event, compact }) => {
   const [openPopever, setOpenPopever] = useState(false);
   const popoverAnchor = useRef(null);
 
@@ -140,6 +150,23 @@ const RenderDayEvents = ({ event }) => {
       </Button>
     );
   };
+
+  if (compact) {
+    return (
+      <Box
+        sx={[
+          {
+            borderRadius: '50%',
+            width: '5px',
+            height: '5px',
+          },
+          {
+            backgroundColor: getFilterColor(event.type),
+          },
+        ]}
+      ></Box>
+    );
+  }
 
   return (
     <>

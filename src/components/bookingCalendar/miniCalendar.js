@@ -6,7 +6,7 @@ const dayofWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export default function MiniCalendar({ value, days, filter, handleClick }) {
   return (
-    <Box sx={{ width: '100%', height: '200px' }}>
+    <Box sx={{ width: '100%', height: '250px' }}>
       <Typography sx={{ fontWeight: 'bold', p: 2 }} variant='h6'>
         {moment(value).format('MMMM YYYY')}
       </Typography>
