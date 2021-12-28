@@ -17,8 +17,9 @@ export default function MiniCalendar({ value, days, filter, handleClick }) {
           alignItems: 'center',
         }}
       >
-        {dayofWeek.map((day) => (
+        {dayofWeek.map((day, index) => (
           <Box
+            key={index}
             sx={{
               width: 'calc(100% / 7 - 4px)',
               mx: 0.8,
@@ -58,6 +59,7 @@ export default function MiniCalendar({ value, days, filter, handleClick }) {
 
           return (
             <DayDiv
+              key={index}
               day={day}
               filter={filter}
               compact={true}

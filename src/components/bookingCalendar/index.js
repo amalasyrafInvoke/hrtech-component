@@ -88,6 +88,7 @@ export default function BookingCalendar() {
           >
             {dayofWeek.map((day) => (
               <Box
+                key={day}
                 sx={{
                   width: 'calc(100% / 7 - 2px)',
                   mx: { xs: 0.2, md: 1.5 },
@@ -128,7 +129,7 @@ export default function BookingCalendar() {
               }
 
               return (
-                <DayDiv day={day} filter={filter} ref={divRef} index={index} />
+                <DayDiv key={index} day={day} filter={filter} ref={divRef} index={index} />
               );
             })}
           </Box>
