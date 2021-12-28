@@ -23,22 +23,21 @@ export const DayDiv = forwardRef(
   ({ day, filter, compact = false, handleClick, index }, ref) => {
     const [filteredArray, setFilteredArray] = useState([]);
 
-    const getFilteredEvents = () => {
-      let events = mockCalendarEvents.filter(function (item) {
-        for (var key in filter) {
-          if (
-            item.type.toLowerCase() === key.toLowerCase() &&
-            filter[key] !== false
-          )
-            return true;
-        }
-        return false;
-      });
-
-      setFilteredArray(events);
-    };
-
     useEffect(() => {
+      const getFilteredEvents = () => {
+        let events = mockCalendarEvents.filter(function (item) {
+          for (var key in filter) {
+            if (
+              item.type.toLowerCase() === key.toLowerCase() &&
+              filter[key] !== false
+            )
+              return true;
+          }
+          return false;
+        });
+
+        setFilteredArray(events);
+      };
       getFilteredEvents();
     }, [filter]);
 
@@ -103,25 +102,24 @@ export const DayDiv = forwardRef(
             {day.day < 10 ? `0${day.day}` : day.day}
           </h6>
         </Box>
-        {/* <Box sx={{ my: 0.5 }}> */}
         {compact
           ? null
           : filteredArray.map((event) => {
               if (moment(day.fullDate).isSame(new Date(event.dates))) {
-                return <_renderDayEvents event={event} />;
+                return <RenderDayEvents event={event} />;
               }
+              return null;
             })}
-        {/* </Box> */}
       </Box>
     );
   }
 );
 
-const _renderDayEvents = ({ event }) => {
+const RenderDayEvents = ({ event }) => {
   const [openPopever, setOpenPopever] = useState(false);
   const popoverAnchor = useRef(null);
 
-  const _renderButton = ({ title, color, textColor }) => {
+  const RenderButton = ({ title, color, textColor }) => {
     return (
       <Button
         sx={[
@@ -271,12 +269,12 @@ const _renderDayEvents = ({ event }) => {
                   case 'LEAVE':
                     return (
                       <>
-                        <_renderButton
+                        <RenderButton
                           color='white'
                           textColor='pink'
                           title='Reject'
                         />
-                        <_renderButton
+                        <RenderButton
                           color='pink'
                           textColor='white'
                           title={'Approve'}
@@ -287,7 +285,7 @@ const _renderDayEvents = ({ event }) => {
                   case 'BIRTHDAY':
                     return (
                       <>
-                        <_renderButton
+                        <RenderButton
                           color='thistle'
                           textColor='white'
                           title={'Wish Birthday'}
@@ -297,7 +295,7 @@ const _renderDayEvents = ({ event }) => {
                   case 'ANNIVERSARY':
                     return (
                       <>
-                        <_renderButton
+                        <RenderButton
                           color='lightseagreen'
                           textColor='white'
                           title={'Congratulate'}

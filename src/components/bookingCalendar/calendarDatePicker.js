@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { TextField, Box, Button, Typography } from '@mui/material';
@@ -14,14 +14,21 @@ export default function CalendarDatePicker({
 }) {
   const handleClickToday = (ev) => {
     setValue(new Date());
-
-    const index = days.findIndex(
-      (day) =>
-        moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-        moment(day.fullDate).isSame(new Date().toISOString(), 'month')
-    );
-    handleClick(index);
   };
+
+  useEffect(() => {
+    if (
+      moment(value).isSame(new Date().toISOString(), 'day') &&
+      moment(value).isSame(new Date().toISOString(), 'month')
+    ) {
+      const index = days.findIndex(
+        (day) =>
+          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+          moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+      );
+      handleClick(index);
+    }
+  }, [value, days, handleClick]);
 
   return (
     <Box

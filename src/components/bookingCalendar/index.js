@@ -1,4 +1,4 @@
-import React, { useState, useRef, createRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Box } from '@mui/material';
 import useDates from '../../hooks/useDate';
 import CalendarFilter from './calendarFilters';
@@ -18,7 +18,7 @@ export default function BookingCalendar() {
   const { days } = useDates({ dates: value });
   const divRef = useRef([]);
 
-  const handleClick = (index) => {
+  const scrollToDiv = (index) => {
     if (divRef.current[index]) {
       divRef.current[index].scrollIntoView({
         behavior: 'smooth',
@@ -27,9 +27,18 @@ export default function BookingCalendar() {
     }
   };
 
+  const handleClick = useCallback((index) => {
+    scrollToDiv(index);
+  }, []);
+
   return (
     <div style={{ padding: '15px' }}>
-      <CalendarDatePicker value={value} setValue={setValue} days={days} handleClick={handleClick} />
+      <CalendarDatePicker
+        value={value}
+        setValue={setValue}
+        days={days}
+        handleClick={handleClick}
+      />
 
       <Box
         sx={{
