@@ -105,17 +105,23 @@ export const DayDiv = forwardRef(
         </Box>
         {compact ? (
           <Box sx={{ display: 'flex', my: 0.5 }}>
-            {filteredArray.map((event) => {
+            {filteredArray.map((event, index) => {
               if (moment(day.fullDate).isSame(new Date(event.dates))) {
-                return <RenderDayEvents event={event} compact={compact} />;
+                return (
+                  <RenderDayEvents
+                    key={index}
+                    event={event}
+                    compact={compact}
+                  />
+                );
               }
               return null;
             })}
           </Box>
         ) : (
-          filteredArray.map((event) => {
+          filteredArray.map((event, index) => {
             if (moment(day.fullDate).isSame(new Date(event.dates))) {
-              return <RenderDayEvents event={event} />;
+              return <RenderDayEvents key={index} event={event} />;
             }
             return null;
           })

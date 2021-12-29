@@ -9,7 +9,7 @@ import MiniCalendar from './miniCalendar';
 const dayofWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
 export default function BookingCalendar() {
-  const [value, setValue] = useState(new Date());
+  const [value, setValue] = useState(new Date().toISOString());
   const [filter, setFilter] = useState({
     leave: true,
     birthday: true,
@@ -114,9 +114,9 @@ export default function BookingCalendar() {
             {days.map((day, index) => {
               if (index === 0) {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     {Array.from({ length: day.hari }, (_, k) => (
-                      <EmptyDiv day={day} />
+                      <EmptyDiv key={k} day={day} />
                     ))}
                     <DayDiv
                       day={day}
@@ -124,12 +124,18 @@ export default function BookingCalendar() {
                       ref={divRef}
                       index={index}
                     />
-                  </>
+                  </React.Fragment>
                 );
               }
 
               return (
-                <DayDiv key={index} day={day} filter={filter} ref={divRef} index={index} />
+                <DayDiv
+                  key={index}
+                  day={day}
+                  filter={filter}
+                  ref={divRef}
+                  index={index}
+                />
               );
             })}
           </Box>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Typography } from '@mui/material';
 import moment from 'moment';
 import { EmptyDiv, DayDiv } from './dayBlock';
@@ -43,9 +44,9 @@ export default function MiniCalendar({ value, days, filter, handleClick }) {
         {days.map((day, index) => {
           if (index === 0) {
             return (
-              <>
+              <React.Fragment key={index}>
                 {Array.from({ length: day.hari }, (_, k) => (
-                  <EmptyDiv compact={true} />
+                  <EmptyDiv key={k} compact={true} />
                 ))}
                 <DayDiv
                   day={day}
@@ -53,7 +54,7 @@ export default function MiniCalendar({ value, days, filter, handleClick }) {
                   compact={true}
                   handleClick={() => handleClick(index)}
                 />
-              </>
+              </React.Fragment>
             );
           }
 
