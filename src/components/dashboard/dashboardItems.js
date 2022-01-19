@@ -76,14 +76,19 @@ const dashboardItems = [
         link: 'dashboard',
       },
       {
-        title: 'Dashboard1',
+        title: 'My Request',
         icon: <GroupsIcon sx={{ mr: 2 }} />,
         link: 'recruitment3',
       },
       {
-        title: 'Dashboard2',
+        title: 'Calendar',
         icon: <GroupsIcon sx={{ mr: 2 }} />,
         link: 'recruitment4',
+      },
+      {
+        title: 'Analytics',
+        icon: <GroupsIcon sx={{ mr: 2 }} />,
+        link: 'analytics',
       },
     ],
   },
@@ -128,6 +133,11 @@ const dashboardItems = [
         title: 'Dashboard2',
         icon: <GroupsIcon sx={{ mr: 2 }} />,
         link: 'recruitment4',
+      },
+      {
+        title: 'Dashboard5',
+        icon: <GroupsIcon sx={{ mr: 2 }} />,
+        link: 'recruitment5',
       },
     ],
   },
@@ -187,7 +197,8 @@ export const DashboardItem = ({ item, size }) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (location.pathname === item.link) {
+    let parent = location.pathname.split('/');
+    if (`/${parent[1]}` === item.link) {
       setActive(true);
     } else {
       setActive(false);
@@ -217,17 +228,17 @@ export const DashboardItem = ({ item, size }) => {
   );
 };
 
-export const InnerDashboardItem = ({ item }) => {
+export const InnerDashboardItem = ({ item, parent }) => {
   let location = useLocation();
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (location.pathname === item.link) {
+    if (location.pathname === `${parent}/${item.link}`) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [item.link, location.pathname]);
+  }, [item.link, location.pathname, parent]);
 
   return (
     <Link
@@ -237,14 +248,17 @@ export const InnerDashboardItem = ({ item }) => {
       to={item.link}
       sx={{
         my: 2,
-        py: 1,
+        py: 1.5,
         px: 2,
-        borderRadius: 1,
+        borderRadius: 2,
         backgroundColor: active ? 'lightseagreen' : 'white',
         color: active ? 'white' : 'lightslategray',
         fontSize: '14px',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        fontWeight: active ? 'bold' : 'normal',
       }}
     >
       {item.title}

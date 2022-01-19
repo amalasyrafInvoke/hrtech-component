@@ -32,31 +32,6 @@ function App() {
             </>
           );
         })}
-
-        {/* <Route index element={<Navigate to='homepage' />} />
-        <Route path='homepage' element={<Homepage />} />
-        <Route
-          path='recruitment'
-          element={<InnerDashboard parent='/recruitment' />}
-        >
-          <Route index element={<Navigate to='dashboard' />} />
-          <Route path='dashboard' element={<Homepage />} />
-        </Route>
-
-        <Route path='payroll' element={<InnerDashboard parent='/payroll' />}>
-          <Route index element={<Homepage />} />
-        </Route>
-        <Route path='leave' element={<InnerDashboard parent='/leave' />} />
-        <Route path='claim' element={<InnerDashboard parent='/claim' />} />
-        <Route
-          path='performance'
-          element={<InnerDashboard parent='/performance' />}
-        />
-        <Route
-          path='settings'
-          element={<InnerDashboard parent='/settings' />}
-        />
-        <Route path='support' element={<InnerDashboard parent='/support' />} /> */}
       </Route>
     </Routes>
   );

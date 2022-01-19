@@ -13,7 +13,6 @@ export default function InnerDashboard({ parent }) {
       setDashboardItem(items);
       setInnerList(items.items);
     }
-    console.log(parent);
   }, [parent]);
 
   return (
@@ -57,11 +56,12 @@ export default function InnerDashboard({ parent }) {
             alignItems: 'center',
             justifyContent: 'center',
             my: 2,
+            px: 2,
           }}
         >
           {innerList.length
             ? dashboardItem.items.map((item) => (
-                <InnerDashboardItem item={item} />
+                <InnerDashboardItem item={item} parent={parent} />
               ))
             : null}
         </Box>
