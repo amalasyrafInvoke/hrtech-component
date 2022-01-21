@@ -244,7 +244,7 @@ export default function WeeklyDiv({ day, filter }) {
         p: 1,
         width: 'calc(100% / 7)',
         mx: 0.5,
-        height: '350px',
+        height: '300px',
         borderRadius: 2,
         overflowY: 'scroll',
         overflowX: 'hidden',

@@ -42,7 +42,7 @@ export default function WeeklySummary({
           backgroundColor: 'white',
           // border: '1px solid darkslategray',
           width: '100%',
-          height: '450px',
+          height: '400px',
           p: 4,
           borderRadius: 4,
         }}
