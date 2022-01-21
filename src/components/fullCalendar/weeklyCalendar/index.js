@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Box } from '@mui/material';
-import { useWeeklyDates } from '../../hooks/useDate';
+import { useWeeklyDates } from '../../../hooks/useDate';
 import CalendarHeader from './calendarHeader';
 import WeeklySummary from './weeklySummary';
 

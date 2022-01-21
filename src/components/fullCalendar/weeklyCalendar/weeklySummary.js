@@ -30,8 +30,8 @@ export default function WeeklySummary({
   return (
     <Box
       sx={{
-        px: 4,
-        py: 2,
+        px: { xs: 0, md: 4 },
+        py: { xs: 0, md: 2 },
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -42,8 +42,8 @@ export default function WeeklySummary({
           backgroundColor: 'white',
           // border: '1px solid darkslategray',
           width: '100%',
-          height: '400px',
-          p: 4,
+          height: { xs: '300px', md: '400px' },
+          p: { xs: 1, md: 4 },
           borderRadius: 4,
         }}
       >
@@ -66,14 +66,14 @@ export default function WeeklySummary({
               },
             ]}
           >
-            Previous Week
+            Prev
           </Button>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              flexDirection: 'row',
+              flexDirection: { xs: 'column', md: 'row' },
               color: 'darkslategray',
             }}
           >
@@ -83,13 +83,12 @@ export default function WeeklySummary({
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                mr: 2,
+                mr: { xs: 0, md: 2 },
               }}
             >
               <Typography
                 variant='h6'
                 sx={{
-                  display: { xs: 'none', md: 'block' },
                   fontWeight: 'bold',
                 }}
               >
@@ -131,12 +130,17 @@ export default function WeeklySummary({
               },
             ]}
           >
-            Next Week
+            Next
           </Button>
         </Box>
 
         <Box
-          sx={{ display: 'flex', flexDirection: 'row', width: '100%', my: 4 }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
+            my: { xs: 2, md: 4 },
+          }}
         >
           {days.map((day) => (
             <WeeklyDiv day={day} filter={filter} />

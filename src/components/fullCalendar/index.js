@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
-import BookingCalendar from '../bookingCalendar';
-import WeeklyCalendar from '../weeklyCalendar';
+import MonthlyCalendar from './monthlyCalendar';
+import WeeklyCalendar from './weeklyCalendar';
 
 export default function FullCalendar() {
   const [calendarState, setCalendarState] = useState('WEEKLY');
@@ -14,7 +14,7 @@ export default function FullCalendar() {
 
   return (
     <Box>
-      {calendarState === 'MONTHLY' && <BookingCalendar />}
+      {calendarState === 'MONTHLY' && <MonthlyCalendar />}
       {calendarState === 'WEEKLY' && <WeeklyCalendar />}
       <Box sx={{ position: 'fixed', left: 'calc(50% - 86.5px)', bottom: '5%' }}>
         <ToggleButtonGroup

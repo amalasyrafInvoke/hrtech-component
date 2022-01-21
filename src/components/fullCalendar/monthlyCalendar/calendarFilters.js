@@ -7,6 +7,22 @@ import {
   Typography,
 } from '@mui/material';
 
+const getFilterColor = (key) => {
+  switch (key) {
+    case 'LEAVE':
+      return 'mistyrose';
+
+    case 'BIRTHDAY':
+      return 'thistle';
+
+    case 'ANNIVERSARY':
+      return 'indianred';
+
+    default:
+      return 'white';
+  }
+};
+
 export default function CalendarFilter({ filter, setFilter, orientation }) {
   const handleChange = (event) => {
     setFilter({
@@ -25,9 +41,14 @@ export default function CalendarFilter({ filter, setFilter, orientation }) {
         Filters
       </Typography>
       <Box
-        sx={{
-          mb: 1,
-        }}
+        sx={
+          ({
+            mb: 1,
+          },
+          orientation === 'horizontal' && {
+            mb: 0,
+          })
+        }
       >
         <FormGroup
           sx={
@@ -36,7 +57,7 @@ export default function CalendarFilter({ filter, setFilter, orientation }) {
               flexDirection: { xs: 'row', md: 'column' },
             },
             orientation === 'horizontal' && {
-              flexDirection: 'row',
+              flexDirection: { xs: 'column', md: 'row' },
             })
           }
         >
@@ -47,14 +68,18 @@ export default function CalendarFilter({ filter, setFilter, orientation }) {
                 onChange={handleChange}
                 name='leave'
                 sx={{
-                  color: 'pink',
+                  color: getFilterColor('LEAVE'),
                   '&.Mui-checked': {
-                    color: 'pink',
+                    color: getFilterColor('LEAVE'),
                   },
                 }}
               />
             }
-            label={<h4 style={{ color: 'pink', margin: 0 }}>Leave</h4>}
+            label={
+              <h4 style={{ color: getFilterColor('LEAVE'), margin: 0 }}>
+                Leave
+              </h4>
+            }
           />
 
           <FormControlLabel
@@ -64,14 +89,18 @@ export default function CalendarFilter({ filter, setFilter, orientation }) {
                 onChange={handleChange}
                 name='birthday'
                 sx={{
-                  color: 'thistle',
+                  color: getFilterColor('BIRTHDAY'),
                   '&.Mui-checked': {
-                    color: 'thistle',
+                    color: getFilterColor('BIRTHDAY'),
                   },
                 }}
               />
             }
-            label={<h4 style={{ color: 'thistle', margin: 0 }}>Birthdays</h4>}
+            label={
+              <h4 style={{ color: getFilterColor('BIRTHDAY'), margin: 0 }}>
+                Birthdays
+              </h4>
+            }
           />
 
           <FormControlLabel
@@ -81,15 +110,15 @@ export default function CalendarFilter({ filter, setFilter, orientation }) {
                 onChange={handleChange}
                 name='anniversary'
                 sx={{
-                  color: 'lightseagreen',
+                  color: getFilterColor('ANNIVERSARY'),
                   '&.Mui-checked': {
-                    color: 'lightseagreen',
+                    color: getFilterColor('ANNIVERSARY'),
                   },
                 }}
               />
             }
             label={
-              <h4 style={{ color: 'lightseagreen', margin: 0 }}>
+              <h4 style={{ color: getFilterColor('ANNIVERSARY'), margin: 0 }}>
                 Anniversaries
               </h4>
             }

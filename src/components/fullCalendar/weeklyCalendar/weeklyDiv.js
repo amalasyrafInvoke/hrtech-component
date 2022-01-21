@@ -1,137 +1,27 @@
-import React, { useEffect, useState, useRef, forwardRef } from 'react';
-import { Box, Icon, Popover, Typography, Button } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
+import { Box, Typography, Button, Icon, Popover } from '@mui/material';
 import moment from 'moment';
-import mockCalendarEvents from '../../resources/mockCalendarEvents';
+import mockCalendarEvents from '../../../resources/mockCalendarEvents';
+
+const dayofWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
 const getFilterColor = (key) => {
   switch (key) {
     case 'LEAVE':
-      return 'pink';
+      return 'mistyrose';
 
     case 'BIRTHDAY':
       return 'thistle';
 
     case 'ANNIVERSARY':
-      return 'lightseagreen';
+      return 'indianred';
 
     default:
       return 'white';
   }
 };
 
-export const DayDiv = forwardRef(
-  ({ day, filter, compact = false, handleClick, index }, ref) => {
-    const [filteredArray, setFilteredArray] = useState([]);
-
-    useEffect(() => {
-      const getFilteredEvents = () => {
-        let events = mockCalendarEvents.filter(function (item) {
-          for (var key in filter) {
-            if (
-              item.type.toLowerCase() === key.toLowerCase() &&
-              filter[key] !== false
-            )
-              return true;
-          }
-          return false;
-        });
-
-        setFilteredArray(events);
-      };
-      getFilteredEvents();
-    }, [filter]);
-
-    return (
-      <Box
-        sx={{
-          backgroundColor: compact
-            ? 'inherit'
-            : moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-              moment(day.fullDate).isSame(new Date().toISOString(), 'month')
-            ? 'darkslategray'
-            : 'white',
-          color:
-            moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-            moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
-            'white',
-          width: compact ? 'calc(100% / 7 - 4px)' : 'calc(100% / 7 - 8px)',
-          minHeight: compact ? '25px' : '250px',
-          maxHeight: '250px',
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'flex-start',
-          borderTop: compact
-            ? 'none'
-            : moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-              moment(day.fullDate).isSame(new Date().toISOString(), 'month')
-            ? '4px solid #EEBC1D'
-            : '4px solid gray',
-          m: compact ? 0.25 : { xs: 0.5, md: 0.5 },
-          cursor: compact ? 'pointer' : 'default',
-        }}
-        ref={compact ? null : (el) => (ref.current[index] = el)}
-        onClick={compact ? handleClick : null}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            px: { xs: 0, md: 0.5 },
-            color: 'gray',
-          }}
-        >
-          <h6
-            style={{
-              color:
-                moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
-                moment(day.fullDate).isSame(
-                  new Date().toISOString(),
-                  'month'
-                ) &&
-                '#EEBC1D',
-              padding: compact ? '0px' : '5px',
-              marginBlock: 0,
-              fontSize: compact ? '0.65rem' : '1.5rem',
-              fontWeight: 'bold',
-              borderRadius: '50%',
-            }}
-          >
-            {day.day < 10 ? `0${day.day}` : day.day}
-          </h6>
-        </Box>
-        {compact ? (
-          <Box sx={{ display: 'flex', my: 0.5 }}>
-            {filteredArray.map((event, index) => {
-              if (moment(day.fullDate).isSame(new Date(event.dates))) {
-                return (
-                  <RenderDayEvents
-                    key={index}
-                    event={event}
-                    compact={compact}
-                  />
-                );
-              }
-              return null;
-            })}
-          </Box>
-        ) : (
-          filteredArray.map((event, index) => {
-            if (moment(day.fullDate).isSame(new Date(event.dates))) {
-              return <RenderDayEvents key={index} event={event} />;
-            }
-            return null;
-          })
-        )}
-      </Box>
-    );
-  }
-);
-
-const RenderDayEvents = ({ event, compact }) => {
+const RenderDayEvents = ({ event }) => {
   const [openPopever, setOpenPopever] = useState(false);
   const popoverAnchor = useRef(null);
 
@@ -157,23 +47,6 @@ const RenderDayEvents = ({ event, compact }) => {
     );
   };
 
-  if (compact) {
-    return (
-      <Box
-        sx={[
-          {
-            borderRadius: '50%',
-            width: '5px',
-            height: '5px',
-          },
-          {
-            backgroundColor: getFilterColor(event.type),
-          },
-        ]}
-      ></Box>
-    );
-  }
-
   return (
     <>
       <Box
@@ -182,6 +55,7 @@ const RenderDayEvents = ({ event, compact }) => {
             fontSize: '0.75rem',
             borderRadius: '7px',
             py: 1,
+            my: 0.75,
             display: 'flex',
             alignItems: 'center',
             justifyContent: { xs: 'center', md: 'flex-start' },
@@ -234,12 +108,7 @@ const RenderDayEvents = ({ event, compact }) => {
             sx={[
               { position: 'absolute', top: 0, width: '100%', height: '10px' },
               {
-                backgroundColor:
-                  event.type === 'LEAVE'
-                    ? 'pink'
-                    : event.type === 'BIRTHDAY'
-                    ? 'thistle'
-                    : 'lightseagreen',
+                backgroundColor: getFilterColor(event.type),
               },
             ]}
           />
@@ -254,12 +123,7 @@ const RenderDayEvents = ({ event, compact }) => {
           >
             <Box
               sx={{
-                backgroundColor:
-                  event.type === 'LEAVE'
-                    ? 'pink'
-                    : event.type === 'BIRTHDAY'
-                    ? 'thistle'
-                    : 'lightseagreen',
+                backgroundColor: getFilterColor(event.type),
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
@@ -304,11 +168,11 @@ const RenderDayEvents = ({ event, compact }) => {
                       <>
                         <RenderButton
                           color='white'
-                          textColor='pink'
+                          textColor='mistyrose'
                           title='Reject'
                         />
                         <RenderButton
-                          color='pink'
+                          color='mistyrose'
                           textColor='white'
                           title={'Approve'}
                         />
@@ -329,7 +193,7 @@ const RenderDayEvents = ({ event, compact }) => {
                     return (
                       <>
                         <RenderButton
-                          color='lightseagreen'
+                          color='indianred'
                           textColor='white'
                           title={'Congratulate'}
                         />
@@ -348,28 +212,68 @@ const RenderDayEvents = ({ event, compact }) => {
   );
 };
 
-export const EmptyDiv = ({ compact = false }) => {
+export default function WeeklyDiv({ day, filter }) {
+  const [filteredArray, setFilteredArray] = useState([]);
+
+  useEffect(() => {
+    const getFilteredEvents = () => {
+      let events = mockCalendarEvents.filter(function (item) {
+        for (var key in filter) {
+          if (
+            item.type.toLowerCase() === key.toLowerCase() &&
+            filter[key] !== false
+          )
+            return true;
+        }
+        return false;
+      });
+
+      setFilteredArray(events);
+    };
+    getFilteredEvents();
+  }, [filter]);
+
   return (
     <Box
       sx={{
-        backgroundColor: compact ? 'gray' : 'white',
-        width: compact ? 'calc(100% / 7 - 4px)' : 'calc(100% / 7 - 8px)',
-        minHeight: compact ? '0px' : '250px',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        m: compact ? 0.25 : { xs: 0.5, md: 0.5 },
-        // borderTop: '3px solid lightgray',
+        backgroundColor:
+          moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+          moment(day.fullDate).isSame(new Date().toISOString(), 'month')
+            ? 'lightseagreen'
+            : 'ghostwhite',
+        p: 1,
+        width: 'calc(100% / 7)',
+        mx: { xs: 0, md: 0.5 },
+        height: { xs: '200px', md: '300px' },
+        borderRadius: 2,
+        overflowY: 'scroll',
+        overflowX: 'hidden',
       }}
     >
       <Box
         sx={{
           display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'flex-start',
-          width: '100%',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          px: { xs: 0, md: 0.5 },
+          color:
+            moment(day.fullDate).isSame(new Date().toISOString(), 'day') &&
+            moment(day.fullDate).isSame(new Date().toISOString(), 'month') &&
+            'white',
         }}
-      ></Box>
+      >
+        <Typography variant='p'>{dayofWeek[day.hari]}</Typography>
+        <Typography variant='p'>{day.day}</Typography>
+      </Box>
+      <Box sx={{ p: { xs: 0, md: 1 }, my: 2 }}>
+        {filteredArray.map((event, index) => {
+          if (moment(day.fullDate).isSame(new Date(event.dates))) {
+            return <RenderDayEvents key={index} event={event} />;
+          }
+          return null;
+        })}
+      </Box>
     </Box>
   );
-};
+}
