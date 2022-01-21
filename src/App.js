@@ -1,9 +1,10 @@
 // import BookingCalendar from './components/bookingCalendar';
-import DashboardWrapper from './components/dashboard';
+import WeeklyCalendar from './components/weeklyCalendar';
+// import DashboardWrapper from './components/dashboard';
 
 function App() {
   return (
-    <DashboardWrapper />
+    <WeeklyCalendar />
   );
 }
 
