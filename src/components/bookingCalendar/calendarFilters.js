@@ -1,7 +1,13 @@
 import React from 'react';
-import { Box, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+} from '@mui/material';
 
-export default function CalendarFilter({ filter, setFilter }) {
+export default function CalendarFilter({ filter, setFilter, orientation }) {
   const handleChange = (event) => {
     setFilter({
       ...filter,
@@ -15,15 +21,24 @@ export default function CalendarFilter({ filter, setFilter }) {
         p: 2,
       }}
     >
-      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Filters</Typography>
-      <Box sx={{
-        mb: 1,
-      }}>
+      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+        Filters
+      </Typography>
+      <Box
+        sx={{
+          mb: 1,
+        }}
+      >
         <FormGroup
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'row', md: 'column' },
-          }}
+          sx={
+            ({
+              display: 'flex',
+              flexDirection: { xs: 'row', md: 'column' },
+            },
+            orientation === 'horizontal' && {
+              flexDirection: 'row',
+            })
+          }
         >
           <FormControlLabel
             control={
