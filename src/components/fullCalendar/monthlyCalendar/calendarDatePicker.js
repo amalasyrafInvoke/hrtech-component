@@ -54,11 +54,11 @@ export default function CalendarDatePicker({
       <Box sx={{ padding: '20px', display: 'flex', alignItems: 'center' }}>
         <Button
           sx={[
-            { backgroundColor: 'darkslategray', mx: 1 },
+            { backgroundColor: 'lightseagreen', mx: 1 },
             {
               '&:hover': {
                 opacity: '0.85',
-                backgroundColor: 'darkslategray',
+                backgroundColor: 'lightseagreen',
               },
             },
           ]}
@@ -69,7 +69,7 @@ export default function CalendarDatePicker({
         </Button>
         <ArrowCircleLeftIcon
           onClick={() => setValue(moment(value).subtract(1, 'month'))}
-          htmlColor='darkslategray'
+          htmlColor='lightseagreen'
           sx={[
             { mx: 1 },
             {
@@ -93,7 +93,7 @@ export default function CalendarDatePicker({
         </LocalizationProvider>
         <ArrowCircleRightIcon
           onClick={() => setValue(moment(value).add(1, 'month'))}
-          htmlColor='darkslategray'
+          htmlColor='lightseagreen'
           sx={[
             { mx: 1 },
             {

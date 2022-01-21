@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Box } from '@mui/material';
-import useDates from '../../hooks/useDate';
+import useDates from '../../../hooks/useDate';
 import CalendarFilter from './calendarFilters';
 import CalendarDatePicker from './calendarDatePicker';
 import { DayDiv, EmptyDiv } from './dayBlock';
@@ -8,7 +8,7 @@ import MiniCalendar from './miniCalendar';
 
 const dayofWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
 
-export default function BookingCalendar() {
+export default function MonthlyCalendar() {
   const [value, setValue] = useState(new Date().toISOString());
   const [filter, setFilter] = useState({
     leave: true,
@@ -32,7 +32,7 @@ export default function BookingCalendar() {
   }, []);
 
   return (
-    <div style={{ padding: '15px' }}>
+    <div style={{ padding: '15px', backgroundColor: 'ghostwhite' }}>
       <CalendarDatePicker
         value={value}
         setValue={setValue}
@@ -56,9 +56,13 @@ export default function BookingCalendar() {
             alignItems: { xs: 'center', md: 'flex-start' },
             justifyContent: 'space-between',
             width: { xs: '100%', md: '20%', lg: '15%' },
-            backgroundColor: 'whitesmoke',
+            backgroundColor: 'ghostwhite',
+            // borderWidth: '1px 0px 1px 1px',
+            // borderColor: 'lightgrey',
+            // borderStyle: 'solid',
             height: { xs: 'auto', md: 'calc(65vh + 50px)' },
-            borderRadius: '15px',
+            borderTopLeftRadius: '15px',
+            borderBottomLeftRadius: '15px',
           }}
         >
           <CalendarFilter filter={filter} setFilter={setFilter} />
@@ -83,7 +87,7 @@ export default function BookingCalendar() {
               height: '50px',
               display: 'flex',
               alignItems: 'center',
-              // borderBottom: '1px solid gray',
+              backgroundColor: 'white'
             }}
           >
             {dayofWeek.map((day) => (

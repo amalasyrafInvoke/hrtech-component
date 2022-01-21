@@ -1,17 +1,18 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import CalendarFilter from '../bookingCalendar/calendarFilters';
+import CalendarFilter from '../monthlyCalendar/calendarFilters';
 
 export default function CalendarHeader({ filter, setFilter }) {
   return (
     <Box
       sx={{
-        p: 4,
+        p: { xs: 2, md: 4},
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
         justifyContent: 'flex-start',
       }}
     >
-      <Box sx={{ width: { xs: 'auto', md: '500px' } }}>
+      <Box sx={{ width: { xs: '100%', md: '500px' } }}>
         <Typography variant='h4'>Weekly Calendar</Typography>
         <Typography
           variant='p'
@@ -24,7 +25,11 @@ export default function CalendarHeader({ filter, setFilter }) {
         </Typography>
       </Box>
       <Box>
-        <CalendarFilter filter={filter} setFilter={setFilter} orientation='horizontal' />
+        <CalendarFilter
+          filter={filter}
+          setFilter={setFilter}
+          orientation='horizontal'
+        />
       </Box>
     </Box>
   );
