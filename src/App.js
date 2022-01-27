@@ -1,9 +1,10 @@
 // import FullCalendar from './components/fullCalendar';
-import DashboardWrapper from './components/dashboard';
+// import DashboardWrapper from './components/dashboard';
 // import LoadingScreen from './components/screens/loadingScreen';
 // import SuccessfulScreen, {
 //   ExampleAdditionalText,
 // } from './components/screens/successfulScreen';
+import SummaryScreen, { entitlementData, applicationSummary } from './components/screens/summaryScreen';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
     //   text='Leave Request Created'
     //   additionalText={<ExampleAdditionalText />}
     // />
-    <DashboardWrapper />
+    <SummaryScreen entitlementData={entitlementData} applicationSummary={applicationSummary} />
+    // <DashboardWrapper />
   );
 }
 
