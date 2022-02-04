@@ -32,11 +32,23 @@ export default function RequestPageFilter({ requestFilter, setRequestFilter }) {
       {requestFilterList.map((list) => (
         <ToggleButton
           value={list.value}
+          selected={requestFilter === list.value}
           sx={{
             px: 5,
             py: 1,
             border: '1px solid #E4E4E4',
             color: '#8D9593',
+            '&.Mui-selected': {
+              backgroundColor: 'lightseagreen',
+              color: 'white',
+              '&:hover': {
+                opacity: 0.85,
+                backgroundColor: 'lightseagreen',
+              },
+            },
+            '&:hover': {
+              opacity: 0.85,
+            },
           }}
         >
           {list.title}
