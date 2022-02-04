@@ -4,7 +4,8 @@
 // import SuccessfulScreen, {
 //   ExampleAdditionalText,
 // } from './components/screens/successfulScreen';
-import SummaryScreen, { entitlementData, applicationSummary } from './components/screens/summaryScreen';
+// import SummaryScreen, { entitlementData, applicationSummary } from './components/screens/summaryScreen';
+import LeaveBalanceDetails from "./components/leavesBalance/leavesBalanceDetails";
 
 function App() {
   return (
@@ -15,8 +16,9 @@ function App() {
     //   text='Leave Request Created'
     //   additionalText={<ExampleAdditionalText />}
     // />
-    <SummaryScreen entitlementData={entitlementData} applicationSummary={applicationSummary} />
+    // <SummaryScreen entitlementData={entitlementData} applicationSummary={applicationSummary} />
     // <DashboardWrapper />
+    <LeaveBalanceDetails />
   );
 }
 
