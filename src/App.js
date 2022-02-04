@@ -5,7 +5,8 @@
 //   ExampleAdditionalText,
 // } from './components/screens/successfulScreen';
 // import SummaryScreen, { entitlementData, applicationSummary } from './components/screens/summaryScreen';
-import LeaveBalanceDetails from "./components/leavesBalanceDetails";
+// import LeaveBalanceDetails from './components/leavesBalanceDetails';
+import MyRequest from './components/requestPage';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
     // />
     // <SummaryScreen entitlementData={entitlementData} applicationSummary={applicationSummary} />
     // <DashboardWrapper />
-    <LeaveBalanceDetails />
+    // <LeaveBalanceDetails />
+    <MyRequest />
   );
 }
 
