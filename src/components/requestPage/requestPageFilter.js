@@ -2,7 +2,7 @@ import React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 const requestFilterList = [
-  { title: 'All Request', value: 'ALL' },
+  { title: 'All', value: 'ALL' },
   { title: 'Approved', value: 'APPROVED' },
   { title: 'Pending', value: 'PENDING' },
   { title: 'Rejected', value: 'REJECTED' },

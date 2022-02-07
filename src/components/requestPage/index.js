@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RequestPageFilter from './requestPageFilter';
+import RequestPageTable from './requestPageTable';
 
 export default function MyRequest() {
   const [requestFilter, setRequestFilter] = useState('ALL');
@@ -43,6 +44,10 @@ export default function MyRequest() {
               px: 2,
               borderRadius: 2,
               mx: 0.5,
+              '&:hover': {
+                opacity: 0.85,
+                backgroundColor: 'lightseagreen',
+              },
             }}
           >
             New Application
@@ -58,9 +63,16 @@ export default function MyRequest() {
           p: 4,
           height: '75vh',
           borderRadius: 2,
+          overflowX: 'scroll',
         }}
       >
-        <RequestPageFilter requestFilter={requestFilter} setRequestFilter={setRequestFilter} />
+        {/* Page Request Filter */}
+        <RequestPageFilter
+          requestFilter={requestFilter}
+          setRequestFilter={setRequestFilter}
+        />
+        {/* Request List */}
+        <RequestPageTable />
       </Box>
     </Container>
   );
