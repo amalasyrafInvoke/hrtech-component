@@ -149,6 +149,36 @@ const mockLeaveRequest = [
     createdAt: '2022-01-28 1.20pm',
     updatedAt: '2022-01-28 4.20pm',
   },
+  // Sixth
+  {
+    leavePolicy: {
+      leaveName: 'Annual Leave',
+    },
+    employee: {
+      name: 'John Doe',
+      employee_no: 420,
+    },
+    startDate: '2022-02-15',
+    endDate: '2022-02-19',
+    duration: 5,
+    status: 'WITHDRAWN',
+    description:
+      'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p',
+    document: 'leaveUpload.pdf',
+    approval: {
+      first_approval: 'Zhafri',
+      first_approval_status: 'APPROVED',
+      first_approval_timestamp: '2022-01-28 4.20pm',
+      second_approval: 'Vincent',
+      second_approval_status: 'PENDING',
+      second_approval_timestamp: '2022-01-28 4.20pm',
+      third_approval: null,
+      third_approval_status: null,
+      third_approval_timestamp: null,
+    },
+    createdAt: '2022-01-28 1.20pm',
+    updatedAt: '2022-01-28 4.20pm',
+  },
 ];
 
 export default mockLeaveRequest;

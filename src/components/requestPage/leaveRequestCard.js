@@ -4,9 +4,15 @@ import moment from 'moment';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ApprovalIcons from './approvalIcons';
+import ActionConfirmation from '../screens/actionConfirmation/index';
 
 export default function LeaveRequestCard({ item }) {
   const [approvalArr, setApprovalArr] = useState([]);
+  const [openWithdrawDialog, setOpenWithdrawDialog] = useState(false);
+
+  const toggleWithdrawDialog = () => {
+    setOpenWithdrawDialog(!openWithdrawDialog);
+  };
 
   useEffect(() => {
     let testArr = [];
@@ -144,15 +150,24 @@ export default function LeaveRequestCard({ item }) {
         <VisibilityIcon sx={{ mx: 1, color: 'lightseagreen' }} />
         <Button
           variant='outlined'
+          onClick={toggleWithdrawDialog}
           sx={{
             color: 'lightseagreen',
             borderColor: 'lightseagreen',
             mx: 1,
             px: 2,
+            '&:hover': {
+              borderColor: 'lightseagreen',
+            },
           }}
         >
           Withdraw
         </Button>
+        <ActionConfirmation
+          open={openWithdrawDialog}
+          toggleDialog={toggleWithdrawDialog}
+          text='Are you sure you want to withdraw this request?'
+        />
       </Box>
     </Box>
   );
